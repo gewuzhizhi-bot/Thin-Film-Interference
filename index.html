@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>等厚薄膜干涉模拟器</title>
+    <title>等厚薄膜干涉模拟器 - 修正版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
@@ -162,16 +162,23 @@
             text-align: center;
             margin-bottom: 10px;
         }
+        .half-wave-loss {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-4">
     <div class="container mx-auto max-w-6xl">
         <header class="mb-8 text-center">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">等厚薄膜干涉模拟器</h1>
-            <p class="text-gray-600">2025物理实验竞赛使用 | 真实物理原理模拟</p>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">等厚薄膜干涉模拟器 - 修正版</h1>
+            <p class="text-gray-600">2025物理实验竞赛使用 | 真实物理原理模拟（半波损失修正）</p>
             <div class="text-sm bg-blue-100 p-2 rounded-lg mt-2">
                 <i class="fa fa-info-circle text-blue-500 mr-1"></i>
-                精确模拟薄膜干涉现象，可调节厚度、折射率、入射角和光源类型
+                修正了半波损失计算，更精确模拟薄膜干涉现象
             </div>
         </header>
 
@@ -464,6 +471,8 @@
                     <div class="w-full h-3 mt-2 rounded-lg rainbow"></div>
                 </div>
             </div>
+            
+                       
             <div class="mt-6 bg-white rounded-lg p-4 shadow">
                 <h3 class="font-medium mb-2">薄膜厚度与干涉颜色的关系</h3>
                 <table class="w-full text-sm">
@@ -859,7 +868,7 @@
             
             const refractionAngle = Math.asin(Math.sin(incidenceAngle) / refractiveIndex);
             
-            const opticalPathDiff = 2 * refractiveIndex * thickness * Math.cos(refractionAngle);
+            const opticalPathDiff = 2 * refractiveIndex * thickness * Math.cos(refractionAngle) + wavelength / 2;
             
             const phaseDiff = (2 * Math.PI * opticalPathDiff) / wavelength;
             
@@ -1194,15 +1203,15 @@
             const refractionAngle = Math.asin(Math.sin(incidenceAngle) / refractiveIndex);
             
 
-            const opticalPathDiff = 2 * refractiveIndex * thickness * Math.cos(refractionAngle);
+            // 修正：添加半波损失项 (λ/2)
+            const opticalPathDiff = 2 * refractiveIndex * thickness * Math.cos(refractionAngle) + wavelength / 2;
             
-
             let phaseDiff = (2 * Math.PI * opticalPathDiff) / wavelength;
             
 
             drawInterferencePattern(upperSurfaceCanvas, phaseDiff, true, thickness);
             
-           
+            // 透射光相位差为反射光相位差 + π
             drawInterferencePattern(lowerSurfaceCanvas, phaseDiff + Math.PI, false, thickness);
         }
         
